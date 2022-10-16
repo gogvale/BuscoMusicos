@@ -1,6 +1,10 @@
-Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+# frozen_string_literal: true
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+Rails.application.routes.draw do
+  api_guard_routes for: 'users', controller: {
+    registration: 'users/registration',
+    authentication: 'users/authentication',
+    passwords: 'users/passwords',
+    tokens: 'users/tokens'
+  }
 end
