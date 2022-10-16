@@ -44,7 +44,7 @@ group :development, :test do
   gem 'factory_bot', '~> 6.2'
   gem 'faker', '~> 2.23'
   gem 'parallel_tests', '~> 3.13'
-  gem 'rspec', '~> 3.11'
+  gem "rspec-rails", "~> 6.0"
   gem 'rubocop', '~> 1.36'
 end
 
