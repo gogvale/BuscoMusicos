@@ -46,6 +46,7 @@ group :development, :test do
   gem 'parallel_tests', '~> 3.13'
   gem "rspec-rails", "~> 6.0"
   gem 'rubocop', '~> 1.36'
+  gem 'shoulda-matchers', '~> 5.0'
 end
 
 group :development do
