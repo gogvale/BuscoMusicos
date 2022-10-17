@@ -23,7 +23,6 @@ module Users
       params.permit(
         :birth_date,
         :email,
-        :gender,
         :name,
         :number_of_participants,
         :password,

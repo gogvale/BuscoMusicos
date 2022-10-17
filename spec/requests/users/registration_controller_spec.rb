@@ -14,8 +14,7 @@ RSpec.describe Users::RegistrationController, type: :request do
 
           role: :musician,
           name: Faker::Name.name,
-          birth_date: [*18..60].sample.years.ago,
-          gender: %i[male female].sample
+          birth_date: [*18..60].sample.years.ago
         }
       end
       context 'with correct information' do
@@ -78,15 +77,6 @@ RSpec.describe Users::RegistrationController, type: :request do
         context 'too young' do
           before do
             params[:password] = 10.years.ago
-            post '/users/sign_up', params:
-          end
-          it 'returns http unprocessable_entity' do
-            expect(response).to(have_http_status(:unprocessable_entity))
-          end
-        end
-        context 'missing gender' do
-          before do
-            params[:gender] = nil
             post '/users/sign_up', params:
           end
           it 'returns http unprocessable_entity' do
