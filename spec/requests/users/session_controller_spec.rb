@@ -202,9 +202,9 @@ RSpec.describe 'SessionControllers', type: :request do
         expect(response).to(have_http_status(:success))
       end
       it 'returns token' do
-        expect(response.headers.dig('Access-Token')).not_to(be_blank)
-        expect(response.headers.dig('Expire-At')).not_to(be_blank)
-        expect(response.headers.dig('Refresh-Token')).not_to(be_blank)
+        expect(response.headers['Access-Token']).not_to(be_blank)
+        expect(response.headers['Expire-At']).not_to(be_blank)
+        expect(response.headers['Refresh-Token']).not_to(be_blank)
       end
     end
     describe 'with incorrect information' do
@@ -252,9 +252,35 @@ RSpec.describe 'SessionControllers', type: :request do
       expect(response).to(have_http_status(:success))
     end
     it 'refreshes token' do
-      expect(response.headers.dig('Access-Token')).not_to(be_blank)
-      expect(response.headers.dig('Expire-At')).not_to(be_blank)
-      expect(response.headers.dig('Refresh-Token')).not_to(be_blank)
+      expect(response.headers['Access-Token']).not_to(be_blank)
+      expect(response.headers['Expire-At']).not_to(be_blank)
+      expect(response.headers['Refresh-Token']).not_to(be_blank)
+    end
+  end
+  describe 'Change Password' do
+    let(:params) do
+      {
+        password:,
+        password_confirmation: password
+      }
+    end
+    before do
+      patch '/users/passwords', headers: Support::User.new.headers, params:
+    end
+    it 'returns http success' do
+      expect(response).to(have_http_status(:success))
+    end
+    it 'returns new token' do
+      expect(response.headers['Access-Token']).not_to(be_blank)
+      expect(response.headers['Expire-At']).not_to(be_blank)
+      expect(response.headers['Refresh-Token']).not_to(be_blank)
+    end
+    it 'changes user password' do
+      post '/users/sign_in', params: {
+        email: user.email,
+        password:
+      }
+      expect(response).to(have_http_status(:success))
     end
   end
 end
