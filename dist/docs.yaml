@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Timbre API
   description: Musician portfolio and search service
-  version: 0.1.0
+  version: 0.1.1
 servers:
   - url: 'http://localhost:3000'
 paths:
@@ -80,7 +80,7 @@ paths:
                   format: date
   /users/sign_in:
     post:
-      description: User Login
+      description: User login/reactivate account
       tags:
         - session
       responses:
@@ -208,6 +208,24 @@ paths:
                 password_confirmation:
                   type: string
                   format: password
+  /users/delete:
+    delete:
+      description: Deactivates account (blocks incoming messages, notifications and log out of all devices)
+      tags:
+        - session
+      responses:
+        '200':
+          description: User deactivated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
 
 
 components:

@@ -296,6 +296,9 @@ RSpec.describe 'SessionControllers', type: :request do
     it 'deactivates user' do
       expect(user.active).to(be_falsey)
     end
+    it 'deletes user tokens' do
+      expect(user.refresh_tokens).to(be_blank)
+    end
   end
   describe 'Reactivate Account' do
     let(:helper) { Support::User.new }
