@@ -283,4 +283,15 @@ RSpec.describe 'SessionControllers', type: :request do
       expect(response).to(have_http_status(:success))
     end
   end
+  describe 'Deactivate Account' do
+    let(:helper) { Support::User.new }
+    let(:user) { helper.user }
+    before do
+      delete '/users/delete', headers: helper.headers
+      user.reload
+    end
+    it 'deactivates user' do
+      expect(user.active).to(be_truthy)
+    end
+  end
 end

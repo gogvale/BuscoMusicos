@@ -30,4 +30,7 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  api_guard:
+    registration:
+      account_deleted: 'Account deactivated successfully'
+      account_reactivated: 'Account reactivated successfully'

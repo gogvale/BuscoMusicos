@@ -1,10 +1,10 @@
 module Support
   class User
     include ApiGuard::Test::ControllerHelper
-    attr_reader :token
+    attr_reader :token, :user
 
     def initialize(role: :musician, expired: false)
-      user = FactoryBot::create(role)
+      @user = FactoryBot.create(role)
       @token = jwt_and_refresh_token(user, 'user', expired)
     end
 

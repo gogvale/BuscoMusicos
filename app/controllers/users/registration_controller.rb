@@ -12,12 +12,12 @@ module Users
     #   end
     # end
 
-    # def destroy
-    #   current_resource.destroy
-    #   render_success(message: I18n.t('api_guard.registration.account_deleted'))
-    # end
+    def destroy
+      current_resource.update(active: false)
+      render_success(message: I18n.t('api_guard.registration.account_deleted'))
+    end
 
-    # private
+    private
 
     def sign_up_params
       params.permit(
