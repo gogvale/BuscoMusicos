@@ -217,7 +217,7 @@ RSpec.describe 'SessionControllers', type: :request do
       context 'missing password' do
         before do
           params[:password] = nil
-          post '/users/sign_up', params:
+          post '/users/sign_in', params:
         end
         it 'returns http unprocessable_entity' do
           expect(response).to(have_http_status(:unprocessable_entity))
@@ -226,7 +226,7 @@ RSpec.describe 'SessionControllers', type: :request do
       context 'incorrect password' do
         before do
           params[:password] = Faker::Internet.password
-          post '/users/sign_up', params:
+          post '/users/sign_in', params:
         end
         it 'returns http unprocessable_entity' do
           expect(response).to(have_http_status(:unprocessable_entity))
@@ -235,7 +235,7 @@ RSpec.describe 'SessionControllers', type: :request do
       context 'non-existent email' do
         before do
           params[:email] = Faker::Internet.email
-          post '/users/sign_up', params:
+          post '/users/sign_in', params:
         end
         it 'returns http unprocessable_entity' do
           expect(response).to(have_http_status(:unprocessable_entity))

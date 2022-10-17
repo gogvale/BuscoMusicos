@@ -8,7 +8,7 @@ servers:
 paths:
   /users/sign_up:
     post:
-      description: Login
+      description: User registration
       responses:
         '200':
           description: Signed up successfully
@@ -59,6 +59,49 @@ paths:
                 name:
                   type: string
                 birth_date:
+                  type: string
+  /users/sign_in:
+    post:
+      description: User Login
+      responses:
+        '200':
+          description: Logged in successfully
+          headers:
+            Access-Token:
+              schema:
+                type: string
+              description: Bearer token
+            Refresh-Token:
+              schema:
+                type: string
+              description: Token used for refreshing session (refer to Refresh Token endpoint)
+            Expire-At:
+              schema:
+                type: integer
+              description: Timestamp for when a token is no longer valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
                   type: string
 
 
