@@ -14,6 +14,7 @@ module Users
 
     def destroy
       current_resource.update!(active: false)
+      current_resource.refresh_tokens.destroy_all
       render_success(message: I18n.t('api_guard.registration.account_deleted'))
     end
 
