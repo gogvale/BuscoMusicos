@@ -7,8 +7,15 @@ servers:
   - url: 'http://localhost:3000'
 paths:
   /users/sign_up:
+    parameters:
+      - in: header
+        name: Content-Type
+        schema:
+          type: string
     post:
       description: User registration
+      tags:
+        - session
       responses:
         '200':
           description: Signed up successfully
@@ -50,19 +57,32 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
                 password:
                   type: string
+                  format: password
                 password_confirmation:
                   type: string
+                  format: password
                 role:
                   type: string
+                  enum: [musician, musician_group]
+                  description: >
+                    * musician: individual artist
+                    * musician_group: trio, quartets, bands, etc.
+                number_of_participants:
+                  type: integer
+                  description: Required if role musician selected
                 name:
                   type: string
                 birth_date:
                   type: string
+                  format: date
   /users/sign_in:
     post:
       description: User Login
+      tags:
+        - session
       responses:
         '200':
           description: Logged in successfully
@@ -101,8 +121,47 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
                 password:
                   type: string
+                  format: password
+  /users/tokens:
+    post:
+      parameters:
+        - in: header
+          name: Refresh-Token
+          schema:
+            type: string
+          required: true
+      description: Refresh expired token
+      tags:
+        - session
+      responses:
+        '200':
+          description: Token refreshed successfully
+          headers:
+            Access-Token:
+              schema:
+                type: string
+              description: Bearer token
+            Refresh-Token:
+              schema:
+                type: string
+              description: Token used for refreshing session (refer to Refresh Token endpoint)
+            Expire-At:
+              schema:
+                type: integer
+              description: Timestamp for when a token is no longer valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
 
 
 components:
@@ -132,4 +191,4 @@ components:
       bearerFormat: JWT
 
 security:
-  - bearerAuth: [ ]
+  - bearerAuth: []
