@@ -162,6 +162,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/APIGuardBodyError'
+  /users/passwords:
+    patch:
+      description: Reset password
+      tags:
+        - session
+      responses:
+        '200':
+          description: Password reset successfully
+          headers:
+            Access-Token:
+              schema:
+                type: string
+              description: Bearer token
+            Refresh-Token:
+              schema:
+                type: string
+              description: Token used for refreshing session (refer to Refresh Token endpoint)
+            Expire-At:
+              schema:
+                type: integer
+              description: Timestamp for when a token is no longer valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: string
+                  format: password
+                password_confirmation:
+                  type: string
+                  format: password
 
 
 components:
