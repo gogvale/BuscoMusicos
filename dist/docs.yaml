@@ -6,4 +6,87 @@ info:
 servers:
   - url: 'http://localhost:3000'
 paths:
-  
+  /users/sign_up:
+    post:
+      description: Login
+      responses:
+        '200':
+          description: Signed up successfully
+          headers:
+            Access-Token:
+              schema:
+                type: string
+              description: Bearer token
+            Refresh-Token:
+              schema:
+                type: string
+              description: Token used for refreshing session (refer to Refresh Token endpoint)
+            Expire-At:
+              schema:
+                type: integer
+              description: Timestamp for when a token is no longer valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - role
+                - name
+                - birth_date
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+                role:
+                  type: string
+                name:
+                  type: string
+                birth_date:
+                  type: string
+
+
+components:
+  responses:
+    UnauthorizedError:
+      description: Access token is missing in the request
+  schemas:
+    APIGuardBodySuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    APIGuardBodyError:
+      type: object
+      properties:
+        status:
+          type: string
+        error:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: [ ]
