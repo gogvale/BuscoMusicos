@@ -1,0 +1,258 @@
+openapi: 3.0.3
+info:
+  title: Timbre API
+  description: Musician portfolio and search service
+  version: 0.1.1
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /users/sign_up:
+    parameters:
+      - in: header
+        name: Content-Type
+        schema:
+          type: string
+    post:
+      description: User registration
+      tags:
+        - session
+      responses:
+        '200':
+          description: Signed up successfully
+          headers:
+            Access-Token:
+              schema:
+                type: string
+              description: Bearer token
+            Refresh-Token:
+              schema:
+                type: string
+              description: Token used for refreshing session (refer to Refresh Token endpoint)
+            Expire-At:
+              schema:
+                type: integer
+              description: Timestamp for when a token is no longer valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - role
+                - name
+                - birth_date
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                password_confirmation:
+                  type: string
+                  format: password
+                role:
+                  type: string
+                  enum: [musician, musician_group]
+                  description: >
+                    * musician: individual artist
+                    * musician_group: trio, quartets, bands, etc.
+                number_of_participants:
+                  type: integer
+                  description: Required if role musician selected
+                name:
+                  type: string
+                birth_date:
+                  type: string
+                  format: date
+  /users/sign_in:
+    post:
+      description: User login/reactivate account
+      tags:
+        - session
+      responses:
+        '200':
+          description: Logged in successfully
+          headers:
+            Access-Token:
+              schema:
+                type: string
+              description: Bearer token
+            Refresh-Token:
+              schema:
+                type: string
+              description: Token used for refreshing session (refer to Refresh Token endpoint)
+            Expire-At:
+              schema:
+                type: integer
+              description: Timestamp for when a token is no longer valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+  /users/tokens:
+    post:
+      parameters:
+        - in: header
+          name: Refresh-Token
+          schema:
+            type: string
+          required: true
+      description: Refresh expired token
+      tags:
+        - session
+      responses:
+        '200':
+          description: Token refreshed successfully
+          headers:
+            Access-Token:
+              schema:
+                type: string
+              description: Bearer token
+            Refresh-Token:
+              schema:
+                type: string
+              description: Token used for refreshing session (refer to Refresh Token endpoint)
+            Expire-At:
+              schema:
+                type: integer
+              description: Timestamp for when a token is no longer valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
+  /users/passwords:
+    patch:
+      description: Reset password
+      tags:
+        - session
+      responses:
+        '200':
+          description: Password reset successfully
+          headers:
+            Access-Token:
+              schema:
+                type: string
+              description: Bearer token
+            Refresh-Token:
+              schema:
+                type: string
+              description: Token used for refreshing session (refer to Refresh Token endpoint)
+            Expire-At:
+              schema:
+                type: integer
+              description: Timestamp for when a token is no longer valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: string
+                  format: password
+                password_confirmation:
+                  type: string
+                  format: password
+  /users/delete:
+    delete:
+      description: Deactivates account (blocks incoming messages, notifications and log out of all devices)
+      tags:
+        - session
+      responses:
+        '200':
+          description: User deactivated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodySuccess'
+        '422':
+          description: An error has ocurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIGuardBodyError'
+
+
+components:
+  responses:
+    UnauthorizedError:
+      description: Access token is missing in the request
+  schemas:
+    APIGuardBodySuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+    APIGuardBodyError:
+      type: object
+      properties:
+        status:
+          type: string
+        error:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
