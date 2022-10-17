@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   has_secure_password
+  api_guard_associations refresh_token: 'refresh_tokens'
   MINIMAL_AGE ||= 18
 
   enum role: {
@@ -16,6 +17,8 @@ class User < ApplicationRecord
   validates :birth_date, presence: true
   validates :number_of_participants, numericality: { greater_than: 0 }, if: proc { _1.musician_group? }
   validate :age_restriction
+
+  has_many :refresh_tokens, dependent: :delete_all
 
   private
 

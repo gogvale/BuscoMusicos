@@ -9,7 +9,11 @@ FactoryBot.define do
     birth_date { 20.years.ago }
     factory :musician do
       role { :musician }
-      gender { %i[male female].sample }
+      factory :authenticated_user do
+        after(:create) do |user|
+          create(:refresh_token, user: user)
+        end
+      end
     end
     factory :musician_group do
       role { :musician_group }

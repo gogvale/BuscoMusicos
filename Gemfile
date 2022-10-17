@@ -43,6 +43,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'faker', '~> 2.23'
+  gem 'json_spec'
   gem 'parallel_tests', '~> 3.13'
   gem "rspec-rails", "~> 6.0"
   gem 'rubocop', '~> 1.36'

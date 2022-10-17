@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Users::RegistrationController, type: :request do
-  describe 'POST #create' do
+  describe 'Sign Up' do
     let(:new_password) { Faker::Internet.password }
     describe 'for musicians' do
       let(:params) do
