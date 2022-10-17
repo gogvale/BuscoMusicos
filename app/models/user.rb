@@ -15,7 +15,7 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :role, presence: true
   validates :birth_date, presence: true
-  validates :active, presence: true
+
   validates :number_of_participants, numericality: { greater_than: 0 }, if: proc { _1.musician_group? }
   validate :age_restriction
 

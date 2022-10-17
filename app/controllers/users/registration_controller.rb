@@ -1,6 +1,6 @@
 module Users
   class RegistrationController < ApiGuard::RegistrationController
-    # before_action :authenticate_resource, only: [:destroy]
+    before_action :authenticate_resource, only: [:destroy]
 
     # def create
     #   init_resource(sign_up_params)
@@ -13,7 +13,7 @@ module Users
     # end
 
     def destroy
-      current_resource.update(active: false)
+      current_resource.update!(active: false)
       render_success(message: I18n.t('api_guard.registration.account_deleted'))
     end
 

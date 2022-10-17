@@ -290,7 +290,28 @@ RSpec.describe 'SessionControllers', type: :request do
       delete '/users/delete', headers: helper.headers
       user.reload
     end
+    it 'returns http success' do
+      expect(response).to(have_http_status(:success))
+    end
     it 'deactivates user' do
+      expect(user.active).to(be_falsey)
+    end
+  end
+  describe 'Reactivate Account' do
+    let(:helper) { Support::User.new }
+    let(:user) { helper.user }
+    let(:params) do
+      {
+        email: user.email,
+        password:
+      }
+    end
+    before do
+      user.update(active: false, password:)
+      post '/users/sign_in', params: params
+      user.reload
+    end
+    it 'activates user' do
       expect(user.active).to(be_truthy)
     end
   end

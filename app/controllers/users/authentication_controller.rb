@@ -3,14 +3,19 @@ module Users
     # before_action :find_resource, only: [:create]
     # before_action :authenticate_resource, only: [:destroy]
 
-    # def create
-    #   if resource.authenticate(params[:password])
-    #     create_token_and_set_header(resource, resource_name)
-    #     render_success(message: I18n.t('api_guard.authentication.signed_in'))
-    #   else
-    #     render_error(422, message: I18n.t('api_guard.authentication.invalid_login_credentials'))
-    #   end
-    # end
+    def create
+      if resource.authenticate(params[:password])
+        create_token_and_set_header(resource, resource_name)
+        if resource.active
+          render_success(message: I18n.t('api_guard.authentication.signed_in'))
+        else
+          resource.update(active: true)
+          render_success(message: I18n.t('api_guard.registration.account_reactivated'))
+        end
+      else
+        render_error(422, message: I18n.t('api_guard.authentication.invalid_login_credentials'))
+      end
+    end
 
     # def destroy
     #   blacklist_token
