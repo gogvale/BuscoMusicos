@@ -8,9 +8,9 @@
 
 Things you may want to cover:
 
-###  Database creation
+###  Database creation + migrations
 ```shell
-$ bin/rails db:create
+$ bin/rails db:migrate:reset
 ```
 
 ### Running tests
